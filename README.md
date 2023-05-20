@@ -36,6 +36,10 @@ hau -f /path/to/file
 halo-attachment-upload -f /path/to/file
 ```
 
+## 在 Typora 中使用
+
+TDB
+
 ## 帮助
 
 ```bash

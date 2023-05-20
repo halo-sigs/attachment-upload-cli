@@ -2,6 +2,8 @@
 
 > 在 Terminal 中上传文件到 Halo 并得到链接，兼容 Typora 编辑器的图片上传。
 
+[![asciicast](https://asciinema.org/a/NVnIamnx3WrQNnDSOHKLDqDic.svg)](https://asciinema.org/a/NVnIamnx3WrQNnDSOHKLDqDic)
+
 ## 安装
 
 ```bash

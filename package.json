@@ -1,0 +1,54 @@
+{
+  "name": "@halo-dev/attachment-upload-cli",
+  "version": "1.0.0",
+  "description": "A CLI tool for uploading attachments to Halo.",
+  "type": "module",
+  "main": "./bin/index.mjs",
+  "bin": {
+    "hau": "./bin/index.mjs",
+    "halo-attachment-upload": "./bin/index.mjs"
+  },
+  "files": [
+    "bin"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "lint": "eslint ./src --ext .js,.cjs,.mjs,.ts,.cts,.mts --ignore-path .gitignore",
+    "prettier": "prettier --write './src/**/*.{js,ts,css,json,ml,yaml,html}'",
+    "release": "release-it"
+  },
+  "keywords": [],
+  "author": "@halo-dev",
+  "maintainers": [
+    {
+      "name": "Ryan Wang",
+      "url": "https://github.com/ruibaby",
+      "email": "i@ryanc.cc"
+    }
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cli-progress": "^3.11.0",
+    "@types/configstore": "^6.0.0",
+    "@types/node": "^18.16.13",
+    "@types/prompts": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
+    "eslint": "^8.41.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.8",
+    "release-it": "^15.10.3",
+    "typescript": "^5.0.4",
+    "unbuild": "^1.2.1"
+  },
+  "dependencies": {
+    "@halo-dev/api-client": "^2.5.2",
+    "axios": "^1.4.0",
+    "cli-progress": "^3.12.0",
+    "commander": "^10.0.1",
+    "configstore": "^6.0.0",
+    "form-data": "^4.0.0",
+    "prompts": "^2.4.2"
+  }
+}

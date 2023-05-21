@@ -8,37 +8,42 @@
 
 ```bash
 npm install @halo-dev/attachment-upload-cli -g
-
-#or 
-
-pnpm install @halo-dev/attachment-upload-cli -g
 ```
 
-安装完成之后，就可以在 Terminal 中使用 `halo-attachment-upload` 命令，或者 `hau`。
+安装完成之后，就可以在 Terminal 中使用 `halo-attachment-upload` 命令，或者 `hau`，以下使用 `hau` 为例。
 
 ## 配置
 
 ```bash
 hau setup
-
-#or
-
-halo-attachment-upload setup
 ```
 
 ## 上传文件
 
 ```bash
 hau -f /path/to/file
-
-#or
-
-halo-attachment-upload -f /path/to/file
 ```
 
 ## 在 Typora 中使用
 
-TDB
+1. 找到 Node 和 hau 的实际路径
+
+    ```bash
+    which node
+    which hau
+
+    # 以下为例子
+    /opt/homebrew/opt/node@18/bin/node
+    /opt/homebrew/bin/hau
+    ```
+
+2. 拼接上传命令
+
+    ```bash
+    /opt/homebrew/opt/node@18/bin/node /opt/homebrew/bin/hau upload -f
+    ```
+
+3. 打开 Typora 设置，进入 **图像 -> 上传服务设定**，将上传服务改为自定义命令，并将上面拼接的命令填入即可。
 
 ## 帮助
 

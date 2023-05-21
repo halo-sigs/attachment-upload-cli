@@ -9,7 +9,7 @@ import apiClient from "./utils/api-client";
 import Configstore from "configstore";
 import prompts from "prompts";
 
-const config = new Configstore("halo-attachment-upload-cli", {}, { globalConfigPath: true });
+const config = new Configstore("@halo-dev/attachment-upload-cli", {}, { globalConfigPath: true });
 
 const program = new Command();
 
@@ -25,7 +25,8 @@ program
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("policyName", "default-policy");
+    formData.append("policyName", config.get("policyName"));
+    formData.append("groupName", config.get("groupName"));
 
     const processBar = new cliProgress.SingleBar(
       {
@@ -53,26 +54,41 @@ program
   .alias("s")
   .description("Setup your Halo site url, username and password")
   .action(async () => {
-    const { site_url } = await prompts({
-      type: "text",
-      name: "site_url",
-      message: "Please input your site url",
-    });
+    const { site_url, username, password, policyName, groupName } = await prompts([
+      {
+        type: "text",
+        name: "site_url",
+        message: "Please input your site url",
+      },
+      {
+        type: "text",
+        name: "username",
+        message: "Please input your username",
+      },
+      {
+        type: "password",
+        name: "password",
+        message: "Please input your password",
+      },
+      {
+        type: "text",
+        name: "policyName",
+        initial: "default-policy",
+        message: "Please input storage policy name",
+      },
+      {
+        type: "text",
+        name: "groupName",
+        initial: "",
+        message: "Please input storage group name",
+      },
+    ]);
+
     config.set("site_url", site_url);
-
-    const { username } = await prompts({
-      type: "text",
-      name: "username",
-      message: "Please input your username",
-    });
     config.set("username", username);
-
-    const { password } = await prompts({
-      type: "password",
-      name: "password",
-      message: "Please input your password",
-    });
     config.set("password", password);
+    config.set("policyName", policyName);
+    config.set("groupName", groupName);
   });
 
 program.parse(process.argv);

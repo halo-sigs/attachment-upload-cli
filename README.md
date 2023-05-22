@@ -23,6 +23,8 @@ npm install @halo-dev/attachment-upload-cli -g
 hau setup
 ```
 
+> 配置文件存储位置：`~/.config/@halo-dev/attachment-upload-cli/config.json`
+
 ## 上传文件
 
 ```bash

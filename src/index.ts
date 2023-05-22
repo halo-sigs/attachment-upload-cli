@@ -13,7 +13,7 @@ const config = new Configstore("@halo-dev/attachment-upload-cli", {}, { globalCo
 
 const program = new Command();
 
-program.name("@halo-dev/attachment-upload-cli").version("0.1.0");
+program.name("halo-attachment-upload").alias("hau").version("0.1.0");
 
 program
   .command("upload")

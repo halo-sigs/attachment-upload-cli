@@ -8,12 +8,13 @@ import cliProgress from "cli-progress";
 import apiClient from "./utils/api-client";
 import Configstore from "configstore";
 import prompts from "prompts";
+import { version } from "../package.json";
 
 const config = new Configstore("@halo-dev/attachment-upload-cli", {}, { globalConfigPath: true });
 
 const program = new Command();
 
-program.name("halo-attachment-upload").alias("hau").version("0.1.0");
+program.name("halo-attachment-upload").alias("hau").version(version);
 
 program
   .command("upload")

@@ -9,6 +9,7 @@ import apiClient from "./utils/api-client";
 import Configstore from "configstore";
 import prompts from "prompts";
 import { version } from "../package.json";
+import { Policy } from "@halo-dev/api-client";
 
 const config = new Configstore("@halo-dev/attachment-upload-cli", {}, { globalConfigPath: true });
 
@@ -55,10 +56,10 @@ program
   .alias("s")
   .description("Setup your Halo site url, username and password")
   .action(async () => {
-    const { site_url, username, password, policyName, groupName } = await prompts([
+    const { siteUrl, username, password, policyName, groupName } = await prompts([
       {
         type: "text",
-        name: "site_url",
+        name: "siteUrl",
         message: "Please input your site url",
       },
       {
@@ -85,7 +86,7 @@ program
       },
     ]);
 
-    config.set("site_url", site_url);
+    config.set("siteUrl", siteUrl);
     config.set("username", username);
     config.set("password", password);
     config.set("policyName", policyName);
@@ -94,7 +95,11 @@ program
 
 program.parse(process.argv);
 
-const getAttachmentPermalink = (name: string) => {
+const getAttachmentPermalink = async (name: string) => {
+  const { data: policy } = await apiClient.get<Policy>(
+    `/apis/storage.halo.run/v1alpha1/policies/${config.get("policyName")}`
+  );
+
   return new Promise((resolve, reject) => {
     const fetchPermalink = () => {
       apiClient
@@ -102,7 +107,11 @@ const getAttachmentPermalink = (name: string) => {
         .then((response) => {
           const permalink = response.data.status.permalink;
           if (permalink) {
-            resolve(`${config.get("site_url")}${permalink}`);
+            if (policy.spec.templateName === "local") {
+              resolve(`${config.get("siteUrl")}${permalink}`);
+            } else {
+              resolve(permalink);
+            }
           } else {
             setTimeout(fetchPermalink, 1000);
           }

@@ -49,7 +49,7 @@ hau -f /path/to/file
 
 ```bash
 ❯ hau --help
-Usage: @halo-dev/attachment-upload-cli [options] [command]
+Usage: halo-attachment-upload|hau [options] [command]
 
 Options:
   -V, --version       output the version number

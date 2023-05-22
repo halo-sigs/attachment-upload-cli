@@ -1,6 +1,6 @@
 {
   "name": "@halo-dev/attachment-upload-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A CLI tool for uploading attachments to Halo.",
   "type": "module",
   "main": "./bin/index.mjs",

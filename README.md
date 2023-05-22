@@ -1,5 +1,10 @@
 # Halo Attachment Upload CLI
 
+<p>
+<a href="https://www.npmjs.com/package/@halo-dev/attachment-upload-cli" target="__blank"><img alt="npm" src="https://img.shields.io/npm/v/@halo-dev/attachment-upload-cli?style=flat-square"></a>
+<a href="https://www.npmjs.com/package/@halo-dev/attachment-upload-cli" target="__blank"><img alt="npm" src="https://img.shields.io/npm/dm/@halo-dev/attachment-upload-cli?style=flat-square"></a>
+</p>
+
 > 在 Terminal 中上传文件到 Halo 并得到链接，兼容 Typora 编辑器的图片上传。
 
 [![asciicast](https://asciinema.org/a/NVnIamnx3WrQNnDSOHKLDqDic.svg)](https://asciinema.org/a/NVnIamnx3WrQNnDSOHKLDqDic)

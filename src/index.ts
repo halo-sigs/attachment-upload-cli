@@ -9,7 +9,8 @@ import apiClient from "./utils/api-client";
 import Configstore from "configstore";
 import prompts from "prompts";
 import { version } from "../package.json";
-import { Policy } from "@halo-dev/api-client";
+import { Group, GroupList, Policy, PolicyList } from "@halo-dev/api-client";
+import axios from "axios";
 
 const config = new Configstore("@halo-dev/attachment-upload-cli", {}, { globalConfigPath: true });
 
@@ -56,41 +57,62 @@ program
   .alias("s")
   .description("Setup your Halo site url, username and password")
   .action(async () => {
-    const { siteUrl, username, password, policyName, groupName } = await prompts([
-      {
-        type: "text",
-        name: "siteUrl",
-        message: "Please input your site url",
-      },
-      {
-        type: "text",
-        name: "username",
-        message: "Please input your username",
-      },
-      {
-        type: "password",
-        name: "password",
-        message: "Please input your password",
-      },
-      {
-        type: "text",
-        name: "policyName",
-        initial: "default-policy",
-        message: "Please input storage policy name",
-      },
-      {
-        type: "text",
-        name: "groupName",
-        initial: "",
-        message: "Please input storage group name",
-      },
-    ]);
+    try {
+      const { siteUrl, username, password } = await prompts([
+        {
+          type: "text",
+          name: "siteUrl",
+          message: "Please input your site url",
+        },
+        {
+          type: "text",
+          name: "username",
+          message: "Please input your username",
+        },
+        {
+          type: "password",
+          name: "password",
+          message: "Please input your password",
+        },
+      ]);
 
-    config.set("siteUrl", siteUrl);
-    config.set("username", username);
-    config.set("password", password);
-    config.set("policyName", policyName);
-    config.set("groupName", groupName);
+      // fetch attachment policies and groups
+      const { data: policies } = await axios.get<PolicyList>(`${siteUrl}/apis/storage.halo.run/v1alpha1/policies`, {
+        auth: { username, password },
+      });
+      const { data: groups } = await axios.get<GroupList>(`${siteUrl}/apis/storage.halo.run/v1alpha1/groups`, {
+        auth: { username, password },
+      });
+
+      const { policyName, groupName } = await prompts([
+        {
+          type: "select",
+          name: "policyName",
+          message: "Please select storage policy",
+          choices: policies.items.map((item: Policy) => ({ title: item.spec.displayName, value: item.metadata.name })),
+        },
+        {
+          type: "select",
+          name: "groupName",
+          message: "Please select storage group",
+          choices: [
+            { title: "Ungrouped", value: "" },
+            ...groups.items.map((item: Group) => ({ title: item.spec.displayName, value: item.metadata.name })),
+          ],
+        },
+      ]);
+
+      config.set("siteUrl", siteUrl);
+      config.set("username", username);
+      config.set("password", password);
+      config.set("policyName", policyName);
+      config.set("groupName", groupName);
+
+      console.log("Setup Success");
+    } catch (error) {
+      config.clear();
+      console.error("Setup Failed, Please check your site url, username and password");
+    }
   });
 
 program.parse(process.argv);

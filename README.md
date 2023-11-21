@@ -28,7 +28,7 @@ hau setup
 ## 上传文件
 
 ```bash
-hau -f /path/to/file
+hau upload -f /path/to/file
 ```
 
 ## 在 Typora 中使用

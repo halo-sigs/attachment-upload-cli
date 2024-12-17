@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 
-import { Command } from "commander";
-import fs from "fs";
-import FormData from "form-data";
+import fs from "node:fs";
+import type { Group, GroupList, Policy, PolicyList } from "@halo-dev/api-client";
 import type { AxiosProgressEvent } from "axios";
+import axios from "axios";
 import cliProgress from "cli-progress";
-import apiClient from "./utils/api-client";
+import { Command } from "commander";
 import Configstore from "configstore";
+import FormData from "form-data";
 import prompts from "prompts";
 import { version } from "../package.json";
-import { Group, GroupList, Policy, PolicyList } from "@halo-dev/api-client";
-import axios from "axios";
+import apiClient from "./utils/api-client";
 
 const config = new Configstore("@halo-dev/attachment-upload-cli", {}, { globalConfigPath: true });
 
@@ -35,14 +35,14 @@ program
       {
         format: "Uploading [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}",
       },
-      cliProgress.Presets.legacy
+      cliProgress.Presets.legacy,
     );
 
     processBar.start(100, 0);
 
-    const { data } = await apiClient.post(`/apis/api.console.halo.run/v1alpha1/attachments/upload`, formData, {
+    const { data } = await apiClient.post("/apis/api.console.halo.run/v1alpha1/attachments/upload", formData, {
       onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-        const process = parseInt(Math.round((progressEvent.loaded * 100) / (progressEvent.total || 1)) + "");
+        const process = Number.parseInt(`${Math.round((progressEvent.loaded * 100) / (progressEvent.total || 1))}`);
         processBar.update(process);
       },
     });
@@ -119,7 +119,7 @@ program.parse(process.argv);
 
 const getAttachmentPermalink = async (name: string) => {
   const { data: policy } = await apiClient.get<Policy>(
-    `/apis/storage.halo.run/v1alpha1/policies/${config.get("policyName")}`
+    `/apis/storage.halo.run/v1alpha1/policies/${config.get("policyName")}`,
   );
 
   return new Promise((resolve, reject) => {

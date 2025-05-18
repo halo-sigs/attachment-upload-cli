@@ -55,33 +55,47 @@ program
 program
   .command("setup")
   .alias("s")
-  .description("Setup your Halo site url, username and password")
+  .description("Setup your Halo site url and personal access token")
   .action(async () => {
     try {
-      const { siteUrl, username, password } = await prompts([
+      const { siteUrl, pat } = await prompts([
         {
           type: "text",
           name: "siteUrl",
           message: "Please input your site url",
-        },
-        {
-          type: "text",
-          name: "username",
-          message: "Please input your username",
+          validate: (value) => {
+            if (!value) {
+              return "Site url is required";
+            }
+            if (!value.startsWith("http")) {
+              return "Site url must start with http:// or https://";
+            }
+            return true;
+          },
         },
         {
           type: "password",
-          name: "password",
-          message: "Please input your password",
+          name: "pat",
+          message: "Please input your personal access token(Attachment Manage Permission)",
+          validate: (value) => {
+            if (!value) {
+              return "Personal access token is required";
+            }
+            return true;
+          },
         },
       ]);
 
       // fetch attachment policies and groups
       const { data: policies } = await axios.get<PolicyList>(`${siteUrl}/apis/storage.halo.run/v1alpha1/policies`, {
-        auth: { username, password },
+        headers: {
+          Authorization: `Bearer ${pat}`,
+        },
       });
       const { data: groups } = await axios.get<GroupList>(`${siteUrl}/apis/storage.halo.run/v1alpha1/groups`, {
-        auth: { username, password },
+        headers: {
+          Authorization: `Bearer ${pat}`,
+        },
       });
 
       const { policyName, groupName } = await prompts([
@@ -103,15 +117,14 @@ program
       ]);
 
       config.set("siteUrl", siteUrl);
-      config.set("username", username);
-      config.set("password", password);
+      config.set("pat", pat);
       config.set("policyName", policyName);
       config.set("groupName", groupName);
 
       console.log("Setup Success");
     } catch (error) {
       config.clear();
-      console.error("Setup Failed, Please check your site url, username and password");
+      console.error("Setup Failed, Please check your site url, personal access token: ", error);
     }
   });
 

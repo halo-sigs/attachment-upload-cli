@@ -23,6 +23,8 @@ npm install @halo-dev/attachment-upload-cli -g
 hau setup
 ```
 
+其中，[Personal Access Token](https://docs.halo.run/user-guide/user-center#%E4%B8%AA%E4%BA%BA%E4%BB%A4%E7%89%8C) 需要有附件管理的权限。
+
 > 配置文件存储位置：`~/.config/@halo-dev/attachment-upload-cli/config.json`
 
 ## 上传文件
@@ -64,6 +66,6 @@ Options:
 
 Commands:
   upload|u [options]  Upload a file to Halo
-  setup|s             Setup your Halo site url, username and password
+  setup|s             Setup your Halo site url and personal access token
   help [command]      display help for command
 ```
